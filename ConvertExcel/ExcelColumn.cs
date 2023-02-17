@@ -38,6 +38,11 @@ namespace ConvertExcel
             return m_IsStructColumn;
         }
 
+        public List<ExcelColumn> GetStructColumns()
+        {
+            return m_StructColumns;
+        }
+
         public string GetFieldName()
         {
             return m_FieldName;

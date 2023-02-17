@@ -46,19 +46,53 @@ namespace ConvertExcel
                     int col = 1;
                     foreach (var column in sheet.GetColumns())
                     {
+                        if (column.IsStruct())
+                        {
+                            ExcelWorksheet workStructSheet = excel.Workbook.Worksheets.Add(sheet.GetSheetName());
+                            int structCol = 1;
+                            foreach (var structColumn in column.GetStructColumns())
+                            {
+                                workStructSheet.SetValue(1, structCol, structColumn.GetFieldName());
+                                workStructSheet.SetValue(2, structCol, structColumn.GetAliasName());
+                                if (TypeCastDic.TryGetValue(structColumn.GetDataType(), out var dataStructType))
+                                {
+                                    workStructSheet.SetValue(3, structCol, dataStructType);
+                                }
+                                else
+                                {
+                                    workStructSheet.SetValue(3, structCol, structColumn.GetDataType());
+                                }
+
+                                int structSheetRow = 4;
+                                foreach (var rowContent in structColumn.GetColumnContent())
+                                {
+                                    workStructSheet.SetValue(structSheetRow, structCol, rowContent);
+                                    structSheetRow++;
+                                }
+
+                                structCol++;
+                            }
+                        }
+
                         worksheet.SetValue(1, col, column.GetFieldName());
                         worksheet.SetValue(2, col, column.GetAliasName());
-                        worksheet.SetValue(3, col, column.GetDataType());
+                        if (TypeCastDic.TryGetValue(column.GetDataType(), out var dataType))
+                        {
+                            worksheet.SetValue(3, col, dataType);
+                        }
+                        else
+                        {
+                            worksheet.SetValue(3, col, column.GetDataType());
+                        }
                         int row = 4;
                         foreach (var rowContent in column.GetColumnContent())
                         {
                             worksheet.SetValue(row, col, rowContent);
                             row++;
                         }
-                        ++col  ;
+                        ++col;
                     }
                 }
-
                 //excel.Save();
                 stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
                 excel.SaveAs(stream);
