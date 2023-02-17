@@ -1,0 +1,15 @@
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\bin\Debug\ConvertExcel.exe.config
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\bin\Debug\ConvertExcel.exe
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\bin\Debug\ConvertExcel.pdb
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\bin\Debug\EPPlus.dll
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\bin\Debug\EPPlus.Interfaces.dll
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\bin\Debug\EPPlus.System.Drawing.dll
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\bin\Debug\EPPlus.xml
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\obj\Debug\ConvertExcel.csproj.AssemblyReference.cache
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\obj\Debug\ConvertExcel.csproj.SuggestedBindingRedirects.cache
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\obj\Debug\ConvertExcel.csproj.CoreCompileInputs.cache
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\obj\Debug\ConvertExcel.csproj.CopyComplete
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\obj\Debug\ConvertExcel.exe
+C:\Users\wangh\Desktop\ConvertExcel\ConvertExcel\obj\Debug\ConvertExcel.pdb
