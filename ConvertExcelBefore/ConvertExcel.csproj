@@ -59,15 +59,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseExcelColumn.cs" />
+    <Compile Include="BaseExcelSheet.cs" />
     <Compile Include="ErrorMsgMgr.cs" />
     <Compile Include="ExcelBook.cs" />
-    <Compile Include="ExcelColumn.cs" />
+    <Compile Include="DataColumn.cs" />
     <Compile Include="ExcelDataMgr.cs" />
     <Compile Include="ExcelSheet.cs" />
     <Compile Include="ExcelStructSheet.cs" />
+    <Compile Include="NormalColumn.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadExcel.cs" />
+    <Compile Include="StructColumn.cs" />
     <Compile Include="WriteExcel.cs" />
   </ItemGroup>
   <ItemGroup>

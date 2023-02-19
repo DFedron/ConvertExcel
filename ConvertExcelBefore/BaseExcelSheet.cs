@@ -2,12 +2,12 @@
 
 namespace ConvertExcel
 {
-    public class ExcelSheet
+    public class BaseExcelSheet
     {
         private string m_SheetName;
         private List<BaseExcelColumn> m_Columns;
 
-        public ExcelSheet(string sheetName, List<BaseExcelColumn> sheetColumns)
+        public BaseExcelSheet(string sheetName, List<BaseExcelColumn> sheetColumns)
         {
             m_SheetName = sheetName;
             m_Columns = sheetColumns;

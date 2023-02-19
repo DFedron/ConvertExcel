@@ -24,9 +24,6 @@ namespace ConvertExcel
         }
 
 
-        private List<string> m_ErrorMsg = new List<string>();
-        private Dictionary<string, ExcelBook> m_ExcelBooksDic = new Dictionary<string, ExcelBook>();
-
         public void ReadFolder(string folderPath)
         {
             ErrorMsgMgr.Instance.ClearErrorMsg();
@@ -44,7 +41,7 @@ namespace ConvertExcel
 
             foreach (DirectoryInfo subFolder in folder.GetDirectories())
             {
-                if(subFolder.Name.Contains("GeneratedYamato") || subFolder.Name.Contains("ConvertExcel"))
+                if (subFolder.Name.Contains("GeneratedYamato") || subFolder.Name.Contains("ConvertExcel"))
                     continue;
                 ReadAllExcelData(subFolder);
             }
@@ -62,10 +59,6 @@ namespace ConvertExcel
 
         public void ReadOneExcel(FileInfo file, string folderPath)
         {
-            if (file.Name.Contains("itemresource"))
-            {
-                Console.WriteLine();
-            }
             FileStream fileStream;
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             ExcelPackage excel;
@@ -81,10 +74,20 @@ namespace ConvertExcel
                     return;
                 }
 
-                var firstSheet = ReadFirstSheet(excel.Workbook.Worksheets[0]);
-                sheets.Add(firstSheet);
-                m_ExcelBooksDic.Add(file.Name, new ExcelBook(file.Name, sheets));
-                //WriteExcel.Instance.WriteToExcel($"{folderPath}", m_ExcelBooksDic[file.Name]);
+                int count = 1;
+                foreach (var sheet in excel.Workbook.Worksheets)
+                {
+                    ExcelSheet excelSheet = null;
+                    if (count == 1)
+                        excelSheet = ReadDataSheet(sheet, file.Name);
+                    else
+                        excelSheet = ReadOtherSheet(sheet);
+                    ++count;
+                    if (excelSheet != null)
+                        sheets.Add(excelSheet);
+                }
+
+                ExcelDataMgr.Instance.AddExcelBook(file.Name, new ExcelBook(file.Name, sheets));
                 excel.Dispose();
                 fileStream.Dispose();
             }
@@ -94,11 +97,49 @@ namespace ConvertExcel
             }
         }
 
-        private ExcelSheet ReadFirstSheet(ExcelWorksheet firstWorksheet)
+        private ExcelSheet ReadOtherSheet(ExcelWorksheet otherSheet)
         {
-            List<ExcelColumn> sheetColumns = new List<ExcelColumn>();
-            int maxColumnNum = firstWorksheet.Dimension.End.Column;
-            int maxRowNum = firstWorksheet.Dimension.End.Row;
+            if (otherSheet == null) return null;
+            List<BaseExcelColumn> sheetColumns = new List<BaseExcelColumn>();
+            try
+            {
+                int maxColumnNum = otherSheet.Dimension.End.Column;
+                int maxRowNum = otherSheet.Dimension.End.Row;
+                for (var col = 1; col <= maxColumnNum; col++)
+                {
+                    List<string> columnContent = new List<string>();
+                    for (int row = 1; row <= maxRowNum; row++)
+                    {
+                        columnContent.Add(GetValue(otherSheet, row, col));
+                    }
+
+                    sheetColumns.Add(new NormalColumn(columnContent, col));
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+
+            return new ExcelSheet(otherSheet.Name, sheetColumns);
+        }
+
+        private ExcelSheet ReadDataSheet(ExcelWorksheet dataSheet, string excelName)
+        {
+            if (dataSheet == null) return null;
+            List<BaseExcelColumn> sheetColumns = new List<BaseExcelColumn>();
+            int maxColumnNum;
+            int maxRowNum;
+            try
+            {
+                maxColumnNum = dataSheet.Dimension.End.Column;
+                maxRowNum = dataSheet.Dimension.End.Row;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
             for (var col = 2; col <= maxColumnNum; col++)
             {
@@ -107,52 +148,50 @@ namespace ConvertExcel
                 string fieldName = "";
                 string aliasName = "";
                 string dataType = "";
-                bool isStruct = false;
 
-                ExcelColumn excelStructColumn = null;
+                StructColumn structColumn = null;
                 for (var row = 1; row <= maxRowNum; row++)
                 {
-                    switch (GetValue(firstWorksheet,row, 1))
+                    switch (GetValue(dataSheet, row, 1))
                     {
                         case "##comment":
-                            aliasName = GetValue(firstWorksheet, row, col);
+                            aliasName = GetValue(dataSheet, row, col);
                             break;
                         case "##var":
                             if (fieldName.Length == 0)
-                                fieldName = GetValue(firstWorksheet, row, col);
+                                fieldName = GetValue(dataSheet, row, col);
                             if (fieldName.Contains("*"))
                             {
-                                isStruct = true;
-                                excelStructColumn = GetStructColumn(firstWorksheet, ref col, row);
+                                structColumn = GetStructColumn(dataSheet, ref col, row, excelName);
                             }
 
                             break;
                         case "##type":
-                            dataType = GetValue(firstWorksheet, row, col);
+                            dataType = GetValue(dataSheet, row, col);
                             break;
                         case "##":
                             break;
                         case "":
-                            columnContent.Add(GetValue(firstWorksheet, row, col));
+                            columnContent.Add(GetValue(dataSheet, row, col));
                             break;
                         default:
                             break;
                     }
 
-                    if (isStruct) break;
+                    if (structColumn != null) break;
                 }
 
-                if (isStruct && excelStructColumn != null)
+                if (structColumn != null)
                 {
-                    sheetColumns.Add(excelStructColumn);
+                    sheetColumns.Add(structColumn);
                 }
                 else
                 {
-                    sheetColumns.Add(new ExcelColumn(fieldName, aliasName, dataType, columnContent, col));
+                    sheetColumns.Add(new DataColumn(fieldName, aliasName, dataType, columnContent, col));
                 }
             }
 
-            return new ExcelSheet(firstWorksheet.Name, sheetColumns);
+            return new ExcelSheet(dataSheet.Name, sheetColumns);
         }
 
         private string GetValue(ExcelWorksheet firstWorksheet, int row, int col)
@@ -168,11 +207,13 @@ namespace ConvertExcel
         }
 
 
-        private ExcelColumn GetStructColumn(ExcelWorksheet curWorksheet, ref int col, int row)
+        private StructColumn GetStructColumn(ExcelWorksheet curWorksheet, ref int col, int row, string excelName)
         {
-            int startIndex = col;
-            List<ExcelColumn> structColumns = new List<ExcelColumn>();
+            int startCol = col;
+            List<DataColumn> structDataColumns = new List<DataColumn>();
+            List<string> structColumnContent = new List<string>();
             string structFieldName = curWorksheet.Cells[row, col].Value.ToString();
+            bool first = true;
             do
             {
                 string fieldName = "";
@@ -198,19 +239,26 @@ namespace ConvertExcel
                             break;
                         case "":
                             columnContent.Add(GetValue(curWorksheet, structRow, col));
+                            if (first)
+                            {
+                                structColumnContent.Add((columnContent.Count).ToString());
+                            }
+
                             break;
                         default:
                             break;
                     }
                 }
 
-                structColumns.Add(new ExcelColumn(fieldName, aliasName, dataType, columnContent, col));
+                structDataColumns.Add(new DataColumn(fieldName, aliasName, dataType, columnContent, col));
                 col++;
+                first = false;
                 if (col > curWorksheet.Dimension.End.Column) break;
             } while (GetValue(curWorksheet, row, col).Length == 0 &&
                      GetValue(curWorksheet, row + 1, col).Length > 0);
 
-            return new ExcelColumn(structFieldName, structColumns, startIndex, --col);
+            col--;
+            return new StructColumn(excelName, structFieldName, structColumnContent, startCol, structDataColumns);
         }
 
         private Dictionary<string, ExcelStructSheet> GetAllStruct(ExcelWorksheet structSheet)
@@ -278,11 +326,6 @@ namespace ConvertExcel
             }
 
             return -1;
-        }
-
-        public Dictionary<string, ExcelBook> GetExcelDic()
-        {
-            return m_ExcelBooksDic;
         }
     }
 }

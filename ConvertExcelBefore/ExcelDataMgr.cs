@@ -22,54 +22,34 @@ namespace ConvertExcel
             get { return instance; }
         }
 
-        private List<string> m_ErrorMsg = new List<string>();
+        private Dictionary<string, ExcelBook> m_ExcelBooksDic = new Dictionary<string, ExcelBook>();
 
-        public void AutoPrintErrorOrSucces()
+        public void AddExcelBook(string excelName, ExcelBook excelBook)
         {
-            if(m_ErrorMsg.Count == 0)
-                PrintSuccessMsg("成功导出，结束");
+            if (m_ExcelBooksDic.ContainsKey(excelName))
+            {
+                m_ExcelBooksDic[excelName] = excelBook;
+            }
             else
             {
-                AddErrorMsg("如碰到问题请联系王慧东解决");
-                PrintAllErrorMsg();
+                m_ExcelBooksDic.Add(excelName, excelBook);
             }
+            
         }
         
-        public void PrintErrorMsg(string msg)
+        public ExcelBook GetExcelBookByExcelName(string excelName)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(msg);
-            Console.ResetColor();
-        }
-
-        public void PrintAllErrorMsg()
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            foreach (var msg in m_ErrorMsg)
+            if (m_ExcelBooksDic.ContainsKey(excelName))
             {
-                Console.WriteLine(msg);
+                return m_ExcelBooksDic[excelName];
             }
-            Console.ResetColor();
+
+            return null;
         }
 
-        public void PrintSuccessMsg(string msg)
+        public Dictionary<string, ExcelBook> GetExcelBooks()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(msg);
-            Console.ResetColor();
-        }
-
-        public void AddErrorMsg(string msg)
-        {
-            if (!m_ErrorMsg.Contains(msg))
-            {
-                m_ErrorMsg.Add(msg);
-            }
-        }
-
-        public void ClearErrorMsg()
-        {
-            m_ErrorMsg.Clear();
+            return m_ExcelBooksDic;
         }
     }
 }
