@@ -59,19 +59,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseExcelColumn.cs" />
-    <Compile Include="BaseExcelSheet.cs" />
-    <Compile Include="ErrorMsgMgr.cs" />
-    <Compile Include="ExcelBook.cs" />
-    <Compile Include="DataColumn.cs" />
-    <Compile Include="ExcelDataMgr.cs" />
-    <Compile Include="ExcelSheet.cs" />
-    <Compile Include="ExcelStructSheet.cs" />
-    <Compile Include="NormalColumn.cs" />
+    <Compile Include="ColumnClass\BaseExcelColumn.cs" />
+    <Compile Include="ColumnClass\DataColumn.cs" />
+    <Compile Include="ColumnClass\NormalColumn.cs" />
+    <Compile Include="ColumnClass\StructColumn.cs" />
+    <Compile Include="Mgr\EnumMgr.cs" />
+    <Compile Include="Mgr\ErrorMsgMgr.cs" />
+    <Compile Include="Mgr\ExcelDataMgr.cs" />
+    <Compile Include="Mgr\Singleton.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadExcel.cs" />
-    <Compile Include="StructColumn.cs" />
+    <Compile Include="SheetClass\BaseExcelSheet.cs" />
+    <Compile Include="SheetClass\ExcelBook.cs" />
+    <Compile Include="SheetClass\ExcelSheet.cs" />
+    <Compile Include="SheetClass\ExcelStructSheet.cs" />
     <Compile Include="WriteExcel.cs" />
   </ItemGroup>
   <ItemGroup>

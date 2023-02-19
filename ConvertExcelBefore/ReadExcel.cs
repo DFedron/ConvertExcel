@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using OfficeOpenXml;
 
 namespace ConvertExcel
 {
-    public class ReadExcel
+    public sealed class ReadExcel : Singleton<ReadExcel>
     {
-        private static readonly ReadExcel instance = new ReadExcel();
-
-        static ReadExcel()
-        {
-        }
-
-        private ReadExcel()
-        {
-        }
-
-        public static ReadExcel Instance
-        {
-            get { return instance; }
-        }
+        // private static readonly ReadExcel instance = new ReadExcel();
+        //
+        // static ReadExcel()
+        // {
+        // }
+        //
+        // private ReadExcel()
+        // {
+        // }
+        //
+        // public static ReadExcel Instance => instance;
 
 
         public void ReadFolder(string folderPath)
@@ -66,7 +62,7 @@ namespace ConvertExcel
             {
                 fileStream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 excel = new ExcelPackage(fileStream);
-                List<ExcelSheet> sheets = new List<ExcelSheet>();
+                List<BaseExcelSheet> sheets = new List<BaseExcelSheet>();
 
                 if (excel.Workbook.Worksheets.Count == 0)
                 {
@@ -77,7 +73,7 @@ namespace ConvertExcel
                 int count = 1;
                 foreach (var sheet in excel.Workbook.Worksheets)
                 {
-                    ExcelSheet excelSheet = null;
+                    ExcelSheet excelSheet;
                     if (count == 1)
                         excelSheet = ReadDataSheet(sheet, file.Name);
                     else
@@ -116,7 +112,7 @@ namespace ConvertExcel
                     sheetColumns.Add(new NormalColumn(columnContent, col));
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }
@@ -136,7 +132,7 @@ namespace ConvertExcel
                 maxColumnNum = dataSheet.Dimension.End.Column;
                 maxRowNum = dataSheet.Dimension.End.Row;
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }
@@ -173,8 +169,6 @@ namespace ConvertExcel
                             break;
                         case "":
                             columnContent.Add(GetValue(dataSheet, row, col));
-                            break;
-                        default:
                             break;
                     }
 
@@ -245,8 +239,6 @@ namespace ConvertExcel
                             }
 
                             break;
-                        default:
-                            break;
                     }
                 }
 
@@ -261,71 +253,70 @@ namespace ConvertExcel
             return new StructColumn(excelName, structFieldName, structColumnContent, startCol, structDataColumns);
         }
 
-        private Dictionary<string, ExcelStructSheet> GetAllStruct(ExcelWorksheet structSheet)
-        {
-            Dictionary<string, ExcelStructSheet> allStructDic = new Dictionary<string, ExcelStructSheet>();
-            int maxColumnNum = structSheet.Dimension.End.Column;
-            int maxRowNum = structSheet.Dimension.End.Row;
+        // private Dictionary<string, ExcelStructSheet> GetAllStruct(ExcelWorksheet structSheet)
+        // {
+        //     Dictionary<string, ExcelStructSheet> allStructDic = new Dictionary<string, ExcelStructSheet>();
+        //     int maxColumnNum = structSheet.Dimension.End.Column;
+        //     int maxRowNum = structSheet.Dimension.End.Row;
+        //
+        //     int fullNameIndex = 0;
+        //     int fieldNameIndex = 0;
+        //     int typeIndex = 0;
+        //     for (var col = 1; col <= maxColumnNum; col++)
+        //     {
+        //         switch (GetValue(structSheet, 1, col))
+        //         {
+        //             case "full_name":
+        //                 fullNameIndex = col;
+        //                 break;
+        //             case "*fields":
+        //                 fieldNameIndex = col;
+        //                 typeIndex = col + 1;
+        //                 break;
+        //             default:
+        //                 break;
+        //         }
+        //
+        //         if (fullNameIndex != 0 && fullNameIndex != 0 && typeIndex != 0)
+        //             break;
+        //     }
+        //
+        //     for (var row = 1; row <= maxRowNum; row++)
+        //     {
+        //         string fullName = "";
+        //         switch (GetValue(structSheet, row, 1))
+        //         {
+        //             case "":
+        //                 fullName = structSheet.Cells[row, fullNameIndex].Value.ToString();
+        //                 Dictionary<string, string> structDic = new Dictionary<string, string>();
+        //                 do
+        //                 {
+        //                     structDic.Add(structSheet.Cells[row, fieldNameIndex].Value.ToString(),
+        //                         structSheet.Cells[row, typeIndex].Value.ToString());
+        //                     row++;
+        //                 } while (structSheet.Cells[row, fullNameIndex].Value.ToString().Length == 0 &&
+        //                          structSheet.Cells[row, fieldNameIndex].Value.ToString().Length > 0);
+        //
+        //                 allStructDic.Add(fullName, new ExcelStructSheet(fullName, structDic));
+        //                 break;
+        //             default:
+        //                 break;
+        //         }
+        //     }
+        //
+        //     return allStructDic;
+        // }
 
-            int fullNameIndex = 0;
-            int fieldNameIndex = 0;
-            int typeIndex = 0;
-            for (var col = 1; col <= maxColumnNum; col++)
-            {
-                switch (GetValue(structSheet, 1, col))
-                {
-                    case "full_name":
-                        fullNameIndex = col;
-                        break;
-                    case "*fields":
-                        fieldNameIndex = col;
-                        typeIndex = col + 1;
-                        break;
-                    default:
-                        break;
-                }
-
-                if (fullNameIndex != 0 && fullNameIndex != 0 && typeIndex != 0)
-                    break;
-            }
-
-            for (var row = 1; row <= maxRowNum; row++)
-            {
-                string fullName = "";
-                switch (GetValue(structSheet, row, 1))
-                {
-                    case "":
-                        fullName = structSheet.Cells[row, fullNameIndex].Value.ToString();
-                        Dictionary<string, string> structDic = new Dictionary<string, string>();
-                        do
-                        {
-                            structDic.Add(structSheet.Cells[row, fieldNameIndex].Value.ToString(),
-                                structSheet.Cells[row, typeIndex].Value.ToString());
-                            row++;
-                        } while (structSheet.Cells[row, fullNameIndex].Value.ToString().Length == 0 &&
-                                 structSheet.Cells[row, fieldNameIndex].Value.ToString().Length > 0);
-
-                        allStructDic.Add(fullName, new ExcelStructSheet(fullName, structDic));
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            return allStructDic;
-        }
-
-        private int GetTypeIndex(ExcelWorksheet curWorksheet)
-        {
-            for (int col = 1; col <= curWorksheet.Dimension.End.Column; ++col)
-            {
-                if (curWorksheet.Cells[1, col].Value.ToString() == "##type")
-                {
-                    return col;
-                }
-            }
-
-            return -1;
-        }
+        // private int GetTypeIndex(ExcelWorksheet curWorksheet)
+        // {
+        //     for (int col = 1; col <= curWorksheet.Dimension.End.Column; ++col)
+        //     {
+        //         if (curWorksheet.Cells[1, col].Value.ToString() == "##type")
+        //         {
+        //             return col;
+        //         }
+        //     }
+        //     return -1;
+        // }
     }
 }

@@ -2,12 +2,7 @@
 
 namespace ConvertExcel
 {
-    public enum ColumnType
-    {
-        StructColumn,
-        NormalColumn,
-        DataColumn,
-    }
+
     public class BaseExcelColumn
     {
         private List<string> m_ColumnContent;

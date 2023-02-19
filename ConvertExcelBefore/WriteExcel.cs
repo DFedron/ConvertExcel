@@ -6,22 +6,22 @@ using OfficeOpenXml;
 
 namespace ConvertExcel
 {
-    public class WriteExcel
+    public sealed class WriteExcel : Singleton<WriteExcel>
     {
-        private static readonly WriteExcel instance = new WriteExcel();
-
-        static WriteExcel()
-        {
-        }
-
-        private WriteExcel()
-        {
-        }
-
-        public static WriteExcel Instance
-        {
-            get { return instance; }
-        }
+        // private static readonly WriteExcel instance = new WriteExcel();
+        //
+        // static WriteExcel()
+        // {
+        // }
+        //
+        // private WriteExcel()
+        // {
+        // }
+        //
+        // public static WriteExcel Instance
+        // {
+        //     get { return instance; }
+        // }
 
         private List<string> m_ErrorMsg = new List<string>();
 
@@ -66,7 +66,7 @@ namespace ConvertExcel
                         excel.Workbook.Worksheets.Delete(sheet.GetSheetName());
                     }
 
-                    worksheet = excel.Workbook.Worksheets.Add(sheet.GetSheetName()); 
+                    worksheet = excel.Workbook.Worksheets.Add(sheet.GetSheetName());
 
                     //ExcelWorksheet worksheet = excel.Workbook.Worksheets.Add(excelBook.GetExcelName());
                     int col = 1;
@@ -102,9 +102,11 @@ namespace ConvertExcel
                             default:
                                 break;
                         }
+
                         ++col;
                     }
                 }
+
                 //excel.Save();
                 stream = new FileStream($"{path}\\{excelBook.GetExcelName()}Yamato.xlsx", FileMode.Create,
                     FileAccess.Write, FileShare.ReadWrite);
