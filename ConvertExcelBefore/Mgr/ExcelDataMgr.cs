@@ -7,21 +7,6 @@ namespace ConvertExcel
 {
     public sealed class ExcelDataMgr : Singleton<ExcelDataMgr>
     {
-    //     private static readonly ExcelDataMgr instance = new ExcelDataMgr();
-    //
-    //     static ExcelDataMgr()
-    //     {
-    //     }
-    //
-    //     private ExcelDataMgr()
-    //     {
-    //     }
-    //
-    //     public static ExcelDataMgr Instance
-    //     {
-    //         get { return instance; }
-    //     }
-
         private Dictionary<string, ExcelBook> m_ExcelBooksDic = new Dictionary<string, ExcelBook>();
 
         public void AddExcelBook(string excelName, ExcelBook excelBook)

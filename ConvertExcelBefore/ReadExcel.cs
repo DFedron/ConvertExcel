@@ -7,19 +7,6 @@ namespace ConvertExcel
 {
     public sealed class ReadExcel : Singleton<ReadExcel>
     {
-        // private static readonly ReadExcel instance = new ReadExcel();
-        //
-        // static ReadExcel()
-        // {
-        // }
-        //
-        // private ReadExcel()
-        // {
-        // }
-        //
-        // public static ReadExcel Instance => instance;
-
-
         public void ReadFolder(string folderPath)
         {
             ErrorMsgMgr.Instance.ClearErrorMsg();

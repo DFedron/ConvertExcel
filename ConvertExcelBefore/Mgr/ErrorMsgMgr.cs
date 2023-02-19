@@ -7,21 +7,6 @@ namespace ConvertExcel
 {
     public class ErrorMsgMgr : Singleton<ErrorMsgMgr>
     {
-        // private static readonly ErrorMsgMgr instance = new ErrorMsgMgr();
-        //
-        // static ErrorMsgMgr()
-        // {
-        // }
-        //
-        // private ErrorMsgMgr()
-        // {
-        // }
-        //
-        // public static ErrorMsgMgr Instance
-        // {
-        //     get { return instance; }
-        // }
-
         private List<string> m_ErrorMsg = new List<string>();
 
         public void AutoPrintErrorOrSucces()
