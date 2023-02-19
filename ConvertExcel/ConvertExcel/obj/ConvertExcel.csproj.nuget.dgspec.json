@@ -1,0 +1,69 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Work\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel.csproj": {}
+  },
+  "projects": {
+    "D:\\Work\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Work\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel.csproj",
+        "projectName": "ConvertExcel",
+        "projectPath": "D:\\Work\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel.csproj",
+        "packagesPath": "C:\\Users\\wangh\\.nuget\\packages\\",
+        "outputPath": "D:\\Work\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\wangh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "EPPlus": {
+              "target": "Package",
+              "version": "[6.1.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
