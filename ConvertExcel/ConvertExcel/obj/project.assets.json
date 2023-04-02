@@ -950,19 +950,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\wangh\\.nuget\\packages\\": {}
+    "C:\\Users\\wangh\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Work\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel.csproj",
+      "projectUniqueName": "D:\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel.csproj",
       "projectName": "ConvertExcel",
-      "projectPath": "D:\\Work\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel.csproj",
+      "projectPath": "D:\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel.csproj",
       "packagesPath": "C:\\Users\\wangh\\.nuget\\packages\\",
-      "outputPath": "D:\\Work\\ConvertExcel\\ConvertExcel\\ConvertExcel\\ConvertExcel\\obj\\",
+      "outputPath": "D:\\ConvertExcel\\ConvertExcel\\ConvertExcel\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
         "C:\\Users\\wangh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1009,7 +1014,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

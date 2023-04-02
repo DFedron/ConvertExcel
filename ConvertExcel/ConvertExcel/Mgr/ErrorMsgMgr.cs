@@ -5,23 +5,8 @@ using OfficeOpenXml;
 
 namespace ConvertExcel
 {
-    public class ExcelDataMgr
+    public class ErrorMsgMgr : Singleton<ErrorMsgMgr>
     {
-        private static readonly ExcelDataMgr instance = new ExcelDataMgr();
-
-        static ExcelDataMgr()
-        {
-        }
-
-        private ExcelDataMgr()
-        {
-        }
-
-        public static ExcelDataMgr Instance
-        {
-            get { return instance; }
-        }
-
         private List<string> m_ErrorMsg = new List<string>();
 
         public void AutoPrintErrorOrSucces()
